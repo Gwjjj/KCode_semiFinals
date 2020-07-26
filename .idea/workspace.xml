@@ -1,0 +1,255 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="BranchesTreeState">
+    <expand>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="LOCAL_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="GROUP_NODE:origin" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+    </expand>
+    <select>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="GROUP_NODE:origin" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="BRANCH:origin/master" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+    </select>
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="f67156c5-06ef-4945-b08b-0685bec7d24c" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/jarRepositories.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/kcodealertanalysis_finalfinal.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/kuaishou/utils/LogDomianThread.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/classes/com/kuaishou/domain/LogDomain.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/classes/com/kuaishou/domain/MonitorLogDomian.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/classes/com/kuaishou/domain/MyMonitor.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/classes/com/kuaishou/domain/MyPoint.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/classes/com/kuaishou/kcode/KcodeAlertAnalysis.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/classes/com/kuaishou/kcode/KcodeAlertAnalysisImpl.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/classes/com/kuaishou/utils/GraphUtils.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/classes/com/kuaishou/utils/IOThread.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/classes/com/kuaishou/utils/IpCastLong.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/classes/com/kuaishou/utils/LogDomianThread.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/classes/com/kuaishou/utils/MinHeap.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/classes/com/kuaishou/utils/SuccessPercent.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/classes/com/kuaishou/utils/TimeCastString.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/classes/com/kuaishou/utils/TimeInit.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/test-classes/com/kuaishou/kcode/check/demo/KcodeAlertAnalysisTest.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/test-classes/com/kuaishou/kcode/check/demo/Q1Result.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/test-classes/com/kuaishou/kcode/check/demo/Q2Input.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/test-classes/com/kuaishou/kcode/check/demo/Q2Result.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/test-classes/com/kuaishou/kcode/check/demo/Q2ResultValue.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/test-classes/com/kuaishou/kcode/check/demo/Utils.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuaishou/domain/MonitorLogDomian.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuaishou/domain/MonitorLogDomian.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuaishou/domain/MyPoint.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuaishou/domain/MyPoint.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuaishou/kcode/KcodeAlertAnalysisImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuaishou/kcode/KcodeAlertAnalysisImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuaishou/utils/GraphUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuaishou/utils/GraphUtils.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuaishou/utils/IOThread.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuaishou/utils/IOThread.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuaishou/utils/MinHeap.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuaishou/utils/MinHeap.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuaishou/utils/SuccessPercent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuaishou/utils/SuccessPercent.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuaishou/utils/TimeCastString.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuaishou/utils/TimeCastString.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/kuaishou/utils/TimeInit.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/kuaishou/utils/TimeInit.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/kuaishou/kcode/check/demo/KcodeAlertAnalysisTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/kuaishou/kcode/check/demo/KcodeAlertAnalysisTest.java" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="RESET_MODE" value="HARD" />
+  </component>
+  <component name="ProjectId" id="1em0dcrW1TEw4aBaTI8cLANaoU9" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="aspect.path.notification.shown" value="true" />
+    <property name="project.structure.last.edited" value="Project" />
+    <property name="project.structure.proportion" value="0.15" />
+    <property name="project.structure.side.proportion" value="0.0" />
+    <property name="settings.editor.selected.configurable" value="editing.templates" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="com.kuaishou.utils" />
+    </key>
+  </component>
+  <component name="RunManager">
+    <configuration name="KcodeAlertAnalysisTest" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="com.kuaishou.kcode.check.demo.KcodeAlertAnalysisTest" />
+      <module name="kcodealertanalysis_finalfinal" />
+      <option name="VM_PARAMETERS" value="-XX:+UseG1GC -XX:MaxGCPauseMillis=500 -Xms6G -Xmx6G -XX:MaxDirectMemorySize=1G" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.kuaishou.kcode.check.demo.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Application.KcodeAlertAnalysisTest" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="f67156c5-06ef-4945-b08b-0685bec7d24c" name="Default Changelist" comment="" />
+      <created>1594911548905</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1594911548905</updated>
+      <workItem from="1594911556695" duration="2157000" />
+      <workItem from="1595648900779" duration="2945000" />
+      <workItem from="1595659674100" duration="5497000" />
+      <workItem from="1595665209541" duration="4571000" />
+      <workItem from="1595724343465" duration="762000" />
+      <workItem from="1595725110773" duration="8638000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="2" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="1">
+          <value>
+            <State>
+              <option name="SHOW_ONLY_AFFECTED_CHANGES" value="true" />
+              <option name="FILTERS">
+                <map>
+                  <entry key="branch">
+                    <value>
+                      <list>
+                        <option value="HEAD" />
+                      </list>
+                    </value>
+                  </entry>
+                  <entry key="roots">
+                    <value>
+                      <list>
+                        <option value="$PROJECT_DIR$" />
+                      </list>
+                    </value>
+                  </entry>
+                </map>
+              </option>
+            </State>
+          </value>
+        </entry>
+        <entry key="MAIN">
+          <value>
+            <State>
+              <option name="FILTERS">
+                <map>
+                  <entry key="branch">
+                    <value>
+                      <list>
+                        <option value="origin/master" />
+                      </list>
+                    </value>
+                  </entry>
+                </map>
+              </option>
+            </State>
+          </value>
+        </entry>
+      </map>
+    </option>
+    <option name="oldMeFiltersMigrated" value="true" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="444" y="26" key="#KcodeAlertAnalysisTest" timestamp="1595665011533">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="444" y="26" key="#KcodeAlertAnalysisTest/0.0.1536.824@0.0.1536.824" timestamp="1595665011533" />
+    <state x="249" y="0" key="#Project_Structure" timestamp="1595665161874">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="249" y="0" key="#Project_Structure/0.0.1536.824@0.0.1536.824" timestamp="1595665161874" />
+    <state x="541" y="179" width="732" height="341" key="#com.intellij.codeInsight.template.impl.EditVariableDialog" timestamp="1595687930273">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="541" y="179" width="732" height="341" key="#com.intellij.codeInsight.template.impl.EditVariableDialog/0.0.1536.824@0.0.1536.824" timestamp="1595687930273" />
+    <state x="223" y="67" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1595725478193">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="223" y="67" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1536.824@0.0.1536.824" timestamp="1595725478193" />
+    <state x="504" y="212" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1594911573336">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="504" y="212" key="#com.intellij.fileTypes.FileTypeChooser/0.0.1536.824@0.0.1536.824" timestamp="1594911573336" />
+    <state x="93" y="93" width="1350" height="638" key="DiffContextDialog" timestamp="1595659430317">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="93" y="93" width="1350" height="638" key="DiffContextDialog/0.0.1536.824@0.0.1536.824" timestamp="1595659430317" />
+    <state x="409" y="119" key="FileChooserDialogImpl" timestamp="1595665161007">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="409" y="119" key="FileChooserDialogImpl/0.0.1536.824@0.0.1536.824" timestamp="1595665161007" />
+    <state width="1493" height="168" key="GridCell.Tab.0.bottom" timestamp="1595756397883">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state width="1493" height="168" key="GridCell.Tab.0.bottom/0.0.1536.824@0.0.1536.824" timestamp="1595756397883" />
+    <state width="1493" height="168" key="GridCell.Tab.0.center" timestamp="1595756397883">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state width="1493" height="168" key="GridCell.Tab.0.center/0.0.1536.824@0.0.1536.824" timestamp="1595756397883" />
+    <state width="1493" height="168" key="GridCell.Tab.0.left" timestamp="1595756397883">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state width="1493" height="168" key="GridCell.Tab.0.left/0.0.1536.824@0.0.1536.824" timestamp="1595756397883" />
+    <state width="1493" height="168" key="GridCell.Tab.0.right" timestamp="1595756397883">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state width="1493" height="168" key="GridCell.Tab.0.right/0.0.1536.824@0.0.1536.824" timestamp="1595756397883" />
+    <state x="249" y="0" key="SettingsEditor" timestamp="1595756308191">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="249" y="0" key="SettingsEditor/0.0.1536.824@0.0.1536.824" timestamp="1595756308191" />
+    <state x="93" y="93" width="1350" height="638" key="com.intellij.history.integration.ui.views.DirectoryHistoryDialog" timestamp="1595725105274">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="93" y="93" width="1350" height="638" key="com.intellij.history.integration.ui.views.DirectoryHistoryDialog/0.0.1536.824@0.0.1536.824" timestamp="1595725105274" />
+    <state x="431" y="145" width="672" height="678" key="search.everywhere.popup" timestamp="1595663758615">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="431" y="145" width="672" height="678" key="search.everywhere.popup/0.0.1536.824@0.0.1536.824" timestamp="1595663758615" />
+  </component>
+</project>
