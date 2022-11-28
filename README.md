@@ -1,191 +1,360 @@
-# 复赛赛题
-**在开始coding前请仔细阅读以下内容**
+## K-Code快手设计大赛（java）
 
-## 赛题背景
-在热身赛和初赛中同学们解决了微服务监控领域最基础的指标计算问题，决赛环节我们需要利用之前的一些积累来解决微服务监控领域遇到的更有挑战的问题。
+### 概要
 
-## 题目内容
-- 实现一个报警检查程序，输入一组报警规则和一个监控文件路径，触发器负责分析监控数据并返回所有的触发的报警的数据。
-- 实现一个报警关联分析程序，输入为报警检查程序（上一问）返回的报警触发点信息，输出该报警影响的最长调用链路（可能存在多条最长路径，需要输出全部）。
+这次比赛分为热身赛，初赛，复赛和决赛。我们组有幸以前20(排名靠后)的身份进入决赛，下面是复赛的赛题和代码。
 
-## 数据和输入输出说明：
-#### 数据类型定义
-  - P99：同热身赛，详情请点击 [热身赛链接](https://kcode-git.kuaishou.com/kcode/kcode-warm-up/-/blob/master/README.md)  
-  - 成功率：为了方便表示下面用SR（Success Rate）表示， 定义同初赛，详情请点击 [初赛链接](https://kcode-git.kuaishou.com/kcode/KcodeRpcMonitor/-/blob/master/README.md)  
+https://github.com/Gwjjj/KCode_semiFinals
 
-#### 报警检查数据说明
-- 报警规则数据格式
-报警规则以字符串集合方式输入，字符格式描述如下：
+附上小数据集合
 
-```
-规则编号,主调服务名,被调服务名,数据类型,触发条件,阈值
-1,serviceB,serviceC,SR,3<,99.9%
-2,ALL,serviceC,P99,2>,300ms
-3,serviceB,ALL,P99,1>,350ms
+https://static.yximgs.com/kos/nlav10305/KcodeAlertAnalysis-test/KcodeAlertAnalysis-data-test.zip
 
-规则编号：全局唯一，用于标记一个报警规则，int类型
-主调服务名：一个具体的主调服务名称或者ALL，ALL代表这个规则对所有的主调生效
-被调服务名：一个具体的被调服务名称或者ALL，ALL代表这个规则对所有的被调生效 【备注：主调服务名 和 被调服务名不会同时为ALL】
-数据类型：本题中只有两种, 分布是：P99 和 SR
-触发条件：连续发生分钟数+比较条件， 例如：“3<” 表示目标数据连续3分钟小于阈值就触发报警。比较条件类型有：> , <  两种
-阈值：数据类型类型会有两种数据，P99对应是ms，SR表示百分比
+---
 
-规则示例解读：
-以编号1为例：serviceB调用serviceC的成功率连续3分钟小于99.9%则报警
-以编号2为例：serviceC作为被调时，如果有P99连续2分钟大于300ms则报警
-以编号3为例：serviceB作为主动时，如果下游任何被调有P99连续1分钟大于350ms则报警
+### 思路
 
-```
-**报警阈值计算是以主被调ip对聚合，聚合时间粒度为1分钟**
+结果都正确的情况下，最后成绩为 N1/T1（Q1时间）*系数 + N2/T2（Q2时间），其中Q1的分比例比较低，所以把大部分计算放在Q1中。
 
+---
 
-- 监控数据格式（同初赛）
-```
-每个调用记录存储在一行，数据直接以逗号分割(,), 换行符号(\n)，为了便于观察数据加了分钟信息备注「2020-06-18 12:33」，实际数据不会有
+### Q1
 
-主调服务名,主调方IP,被调服务名,被调方IP,结果,耗时(ms), 调用时间戳(ms)
-serviceA,172.17.60.2,serviceB,172.17.60.3,true,20,1592454780000「2020-06-18 12:33」
-serviceA,172.17.60.2,serviceB,172.17.60.3,true,30,1592454780000「2020-06-18 12:33」
-serviceA,172.17.60.2,serviceB,172.17.60.3,true,50,1592454900000「2020-06-18 12:34」
+首先需要把日志文件读到内存中，初赛的io速度貌似很快，复赛被限制了，可能官方不想让比赛变成io大赛。
 
-serviceZ,172.17.60.8,serviceA,172.17.60.2,true,420,1592454780000「2020-06-18 12:33」
-serviceZ,172.17.60.8,serviceC,172.17.60.4,true,120,1592454780000「2020-06-18 12:33」
-serviceB,172.17.60.3,serviceC,172.17.60.4,true,360,1592454780000「2020-06-18 12:33」
-serviceB,172.17.60.3,serviceC,172.17.60.4,true,380,1592454780000「2020-06-18 12:33」
-serviceB,172.17.60.3,serviceC,172.17.60.4,true,390,1592454840000「2020-06-18 12:34」
-serviceB,172.17.60.3,serviceC,172.17.60.4,true,395,1592454840000「2020-06-18 12:34」
-serviceB,172.17.60.3,serviceC,172.17.60.4,true,393,1592454900000「2020-06-18 12:35」
-serviceB,172.17.60.3,serviceC,172.17.60.4,true,404,1592454900000「2020-06-18 12:35」
-                                                                                 
-serviceB,172.17.60.3,serviceD,172.17.60.5,true,120,1592454780000「2020-06-18 12:33」
-serviceB,172.17.60.3,serviceD,172.17.60.5,true,430,1592454840000「2020-06-18 12:34」
-serviceB,172.17.60.3,serviceD,172.17.60.5,true,400,1592454840000「2020-06-18 12:34」
-serviceB,172.17.60.3,serviceD,172.17.60.5,true,410,1592454840000「2020-06-18 12:34」
-                                                                                 
-serviceC,172.17.60.4,serviceD,172.17.60.5,true,241,1592454780000「2020-06-18 12:33」
-serviceC,172.17.60.4,serviceD,172.17.60.5,true,345,1592454840000「2020-06-18 12:34」
-serviceC,172.17.60.4,serviceD,172.17.60.5,true,260,1592454840000「2020-06-18 12:34」
-serviceC,172.17.60.4,serviceD,172.17.60.5,true,350,1592454900000「2020-06-18 12:35」
-serviceC,172.17.60.4,serviceD,172.17.60.5,true,140,1592454900000「2020-06-18 12:35」
+在初赛用的BufferedReader缓冲字符流，因为日志中除了字符串还有大部分数字和ip地址，需要二次转换，所以速度很慢。看了很多选手用的ByteBuffer块读，在复赛决定使用多线程mmap，然后读取字节自己转换（本地非常快，但复赛线上不明显）。
 
-serviceD,172.17.60.5,serviceE,172.17.60.4,true,102,1592454900000「2020-06-18 12:35」
-serviceE,172.17.60.4,serviceF,172.17.60.4,true,110,1592454900000「2020-06-18 12:35」
-serviceD,172.17.60.5,serviceF,172.17.60.4,true,120,1592454900000「2020-06-18 12:35」
+#### 流程
 
+```java
+/*
+ * @Author             Gwjjj
+ * @Description        Q1
+ * @param path         日志文件路径
+ * @param alertRules   监控文件列表
+ * @Date               15:47 2020/7/25
+ * @Return             Q1返回报警集合
+ **/
+ @Override
+ public Collection<String> alarmMonitor(String path, Collection<String> alertRules) {
+	 ...                                                         //  一些变量初始化
+     init(path);                                                 //  初始化(日志开始时间，结束时间)
+     dealMonitor(alertRules);                                    //  处理监控列表
+     dealFile(path);                                             //  处理日志文件
+     callMonitorMap = null;
+     calledMonitorMap = null;
+     dealMap();                                                  //  计算Q1和Q2结果
+     return alarmList;                                           
+ }
 ```
 
-- 报警信息输出，报警检查程序需要返回一个报警信息的集合，用字符串描述
+#### 初始化
+
+初始化主要是计算出开始时间和结束时间(比赛日志的时间规则是上下浮动一分钟,+-1即可)，还要算出时间工具类的开始时间的日时分（Q2计算时间需要）
+
+```java
+/*
+ * @Author Gwjjj
+ * @Description                     用开始时间初始化时间工具类
+ * @param time                      long 时间戳
+ * @Date 22:49 2020/7/25
+ * @Return
+ **/
+public static void TimeCastString(Long time){
+    Calendar calendar=Calendar.getInstance();
+    calendar.setTimeInMillis(time);
+    START_DAY = calendar.get(Calendar.DATE);                        //  天
+    START_HOUR_OF_DAY = calendar.get(Calendar.HOUR_OF_DAY);         //  小时
+    START_MINUTE = calendar.get(Calendar.MINUTE)-1;                 //  分
+}
 ```
-规则编号,报警触发时间（分钟）,主调服务名,主调IP, 被调服务名, 被调IP, 报警值
-2,2020-06-18 12:34,serviceB,172.17.60.3,serviceC,172.17.60.4,395ms
-2,2020-06-18 12:35,serviceB,172.17.60.3,serviceC,172.17.60.4,404ms
 
-3,2020-06-18 12:33,serviceB,172.17.60.3,serviceC,172.17.60.4,380ms
-3,2020-06-18 12:34,serviceB,172.17.60.3,serviceC,172.17.60.4,395ms
-3,2020-06-18 12:35,serviceB,172.17.60.3,serviceC,172.17.60.4,404ms
-3,2020-06-18 12:34,serviceB,172.17.60.3,serviceD,172.17.60.5,430ms
+#### 处理监控列表
 
-规则编号： 同上描述
-报警触发时间：真正满足报警规则的时间点，例如：规则2，12:33开始p99已大于350ms，但是持续时间不够，那么报警触发时间应该是12:34
-主调服务名：实际触发报警的主调服务，这里返回的不是ALL，必须是一个具体服务名称
-被调服务名：实际触发报警的被调服务，这里返回的不是ALL，必须是一个具体服务名称
-报警值：触发报警的的值（非报警规则阈值），例如：规则3报警阈值是350，但是时间报警值应该是大于350的某个值
+监控中有明确主被调关系的先加入countMap(最后要计算的Map),其他出现“All”的需要在后面日志遍历过程中单独判断。
+
+出现的数组一般都是前面初始化得出的时间区间。
+
+```java
+public static Map<String,Map<String, MonitorLogDomian>> countMap;       //  分析日志统计Map callName -> calledName
 ```
 
-#### 报警关联分析数据说明
- - 输入：触发报警调用信息的主调服务名、被调服务名、时间戳(分钟级)以及触发监控类型
- - 输出：该条报警影响的最长调用链路（可能存在多条最长路径，需要输出全部），以及整个链路上的监控值(该值为服务级别监控值)
+```java
+public class MonitorLogDomian {
+    public List<MyMonitor> monitorList;						// 	此服务调用对受监控的列表
+    public Map<Long, LogDomain[]> logMap;					//  ip粒度对象
+    public AtomicInteger atomicInteger;                     //  多线程标志位
+    public AtomicInteger[] trueC;                           //  服务级别成功调用数
+    public AtomicInteger[] allC;                            //  服务级别总调用数
+    public List<Integer>[] allList;							//  服务级别耗时列表
+    public List<String>[] p99String;                        //  q2 P99
+    public List<String>[] spString;                         //  q2 SP(成功率)
+    public String[] sp;                                     //  Q2 服务调用之间的sp报警信息
+    public String[] p99;                                    //  Q2 服务调用之间的p99报警信息
+    ...
+}
+```
 
-示例1：
- - 输入：serviceB,serviceD,2020-06-18 12:33,SR
- - 输出：serviceZ->serviceA->serviceB->serviceD->serviceE->serviceF|100.00%,100.00%,100.00%,-1%,-1%
- - 输出说明：100.00%是serviceZ调用serviceA的成功率，其他监控值同理, 如果查询分钟恰好无调用返回-1% 【这里为服务粒度成功率，注意和第一问区别】
- 
-示例2：
- - 输入：serviceB,serviceD,2020-06-18 12:33,P99
- - 输出：serviceZ->serviceA->serviceB->serviceD->serviceE->serviceF|420ms,30ms,120ms,-1ms,-1ms
- - 输出说明：420ms是serviceZ调用serviceA的P99耗时，其他监控值同理，如果查询分钟恰好无调用返回-1ms【这里为服务粒度P99，注意和第一问区别】
-  
-图示举例说明：
- 下图展示示例数据的完整调用图，经过serviceB，serviceD报警点最长调用链路，可以比较直观的看出,
- **只有在给出的数据中只要有过调用关系都属于有调用关系，和具体的分钟数无关**
+#### 处理日志文件
 
- ![image](demo.png)
+```java
+/*
+ * @Author Gwjjj
+ * @Description                     处理日志文件,每次映射固定大小mmap,找到最后的空行分割，加入线程池
+ * @param filePath                  日志文件路径
+ * @Date 16:11 2020/7/25
+ * @Return
+ **/
+private void dealFile(String filePath){
+    byte b;                                                             //  当前读取一字节
+    long cur = 0L;                                                      //  每次开始的偏移量
+    int eachSize = 1<<18;                                               //  每次读取字节数
+    try(FileChannel fChannel = new FileInputStream(new File(filePath)).getChannel()){
+        long length = fChannel.size();                                  //  文件长度（字节）
+        while (cur < length) {
+            MappedByteBuffer mappedByteBuffer = fChannel.map(FileChannel.MapMode.READ_ONLY, cur, eachSize);
+            int offset = eachSize - 1;
+            for (; offset > 0; offset--) {
+                b = mappedByteBuffer.get(offset);
+                if(b == IOThread.SPACE_LINE){                           // 从最后找第一个空行分割
+                    offset++;
+                    break;
+                }
+            }
+            IOThread ioThread = new IOThread(mappedByteBuffer,offset);  // 加入io线程池
+            executorService.execute(ioThread);                          // 执行
+            cur += offset;                                              // 更新已读字节数
+            if(length-cur < eachSize){
+                eachSize = (int)(length-cur);
+            }
+        }
+    }
+    catch (Exception e){
+        e.printStackTrace();
+    }
+    executorService.shutdown();
+    while (true) {                                              		//等待所有任务都执行结束
+        if (executorService.isTerminated()) {
+            break;
+        }
+        Thread.yield();
+    }
+}
+```
 
+io线程主要就是读取字节并加入countMap，同时产生图节点和其邻接矩阵。
 
-## 操作说明
-- 进入决赛队伍登录 https://kcode-git.kuaishou.com 可以直接看到决赛git项目，项目名称为：kcodeAlertAnalysis_xxxxxx
-- 登录 https://kcode-git.kuaishou.com/ 或直接下载 [决赛初始代码](https://kcode-git.kuaishou.com/kcode/kcodealertanalysis)
-- 将初赛初始代码相关文件提交到自己的参赛项目，项目名称为 kcodeAlertAnalysis_xxxxxxx，登录 https://kcode-git.kuaishou.com/ 可以获取
-- pom.xml 中指定了打包插件(无需修改)
-- KcodeAlertAnalysisImpl 中需要选手实现 alarmMonitor 和 getLongestPath 方法
-- KcodeAlertAnalysisTest 用于选手本地测试，在参赛项目中无需提交
-- ==相关的实现必须在 package com.kuaishou.kcode 下面，否则评测程序会发现不了你的实现==
+```java
+while (offset != eachSize){
+        callName = readString();
+        callIp = readIp();
+        calledName = readString();
+        calledIp = readIp();
+        isTrue = isTrue();
+        time =  readInt ();
+        callTime = readTime();
+    	//  判断每条日志的服务对是否和前面一致，可以节省很多get()计算.
+        if(!callName.equals(preCallName) || !calledName.equals(preCalledName)){
+            monitorLogDomian = KcodeAlertAnalysisImpl.countMap.
+                    computeIfAbsent(callName,k->new ConcurrentHashMap<>()).
+                    computeIfAbsent(calledName,k->new MonitorLogDomian());
+            // 相同的服务对只能由一个线程初始化
+            if(monitorLogDomian.atomicInteger.compareAndSet(0,1)){  
+                //  找到图节点
+                callPoint = KcodeAlertAnalysisImpl.graphMap.computeIfAbsent(callName,k -> new MyPoint(callName));
+                calledPoint = KcodeAlertAnalysisImpl.graphMap.computeIfAbsent(calledName,k -> new MyPoint(calledName));
+                //  邻接矩阵
+                callPoint.to.add(calledPoint);
+                calledPoint.from.add(callPoint);
+				...													//  监控信息等初始化
+                monitorLogDomian.atomicInteger.compareAndSet(1,2);  // 初始化完毕
+            }
+            else {
+                while (monitorLogDomian.atomicInteger.get() != 2){
+                    Thread.yield();
+                }
+            }
+            preCallName = callName;
+            preCalledName = calledName;
+        }
+        if(monitorLogDomian.monitorList.size() != 0){
+            ips = callIp << 32 | calledIp;
+            ...   													//  ip粒度初始化和一些计算
+    }
+}
+```
 
-## 评测环境&启动参数
-- JDK 版本： 1.8
-- jvm内存设置 : -XX:+UseG1GC -XX:MaxGCPauseMillis=500 -Xms6G -Xmx6G -XX:MaxDirectMemorySize=1G
-- 评测机器硬件信息（docker）：
-    - 操作系统 CentOS 7.3 64位
-    - CPU	8核 3.00GHz
-    - 硬盘：容量 100GB， 吞吐量 > 100MB/S
-- 如果需要输出文件，请使用 /tmp/ 目录
-  
-## 评测标准&排名
-- 系统会默认拉取每个参赛队伍git项目的master代码作为评测程序执行
-- 评测数据规模是提供的本地评测数据集规模的**2-3倍**，**注意内存消耗**
-- 线上评测数据时间戳不保证验证递增，乱序范围正负一分钟
-- 决赛评测数据会有多份（包括报警规则），会多次new kcodeAlertAnalysisImpl对象进行评测，**不要使用static变量保存中间结果**
-- 单个数据集成绩评测过程
-  - 报警检查程序(alarmMonitor)：读取评测文件中全部记录N1条，报警检查耗时T1
-  - 报警关联分析程序(getLongestPath)：执行查询次数N2次，报警关联分析程序T2
-- 如果结果都正确，单次成绩为 N1/T1*系数 + N2/T2
-- T1、T2均不能超过1800秒，否则无成绩
-- 最终成绩：多个数据集评测成绩平均值作为最终成绩
-- 评测系统会有一定的耗时抖动，排名成绩取最高成绩，鼓励同学在获取理想成绩后持续优化以博取更高成绩
+```java
+...
+private String readString(){                                // 读字符串(最耗时)
+    int i = 0;
+    while ((b = mappedByteBuffer.get(offset++)) != COMMA){
+        chars[i++] = b;
+    }
+    return new String(chars, 0, i);
+}
 
+private long readIp(){                                      // 读取ip
+    long re = 0L;
+    int now;
+    for (int i = 0; i < 3; i++) {
+        now = 0;
+        while ((b = mappedByteBuffer.get(offset++)) != POINT){
+            now = now * 10 + b - ZERO;
+        }
+        re = (re << 8) | now;
+    }
+    now = 0;
+    while ((b = mappedByteBuffer.get(offset++)) != COMMA){
+        now = now * 10 + b - ZERO;
+    }
+    re = (re << 8) | now;
+    return re;
+}
+...
+```
 
-## 要求和限制
-- 题目语言限定为 **==Java==** 
-- 不允许引入任何外部依赖，JavaSE 8 包含的lib除外
-- 排名靠前的代码会被review，如发现大量copy代码或引入不符合要求的三方库，将扣分或取消成绩
-- 禁止在代码中输出任何日志输出或是控制台输出，否则无成绩
-- 上传与题目无关的代码，视为作弊，无成绩
-- 面向数据集编程的代码会被扣分
-- **决赛评测增加次数限制，每个队伍每天 5 次机会，提交代码需谨慎【评测自动触发】**
+因为调用服务对会在不同分钟出现，为了防止在不同线程多余的初始化操作，在MonitorLogDomian加入atomicInteger标志位，0代表未初始化，1代表正在初始化，2代表初始化成功，使用CAS来保证线程安全，有线程安全问题的Map使用ConcurrentHashMap，List使用Collections.synchronizedList，计数则用AtomicInteger。
 
-## 本地测试数据集
- 为了模拟线上评测，决赛提供**两份**本地评测数据 （线上评测也会有多份数据）
- 
- - 测试数据和评测数据1：为方便下载，将数据集切分为多个文件(要全部下载，才能正常解压)：
-   - https://static.yximgs.com/kos/nlav10305/KcodeAlertAnalysis-data1/KcodeAlertAnalysis-data1.z01
-   - https://static.yximgs.com/kos/nlav10305/KcodeAlertAnalysis-data1/KcodeAlertAnalysis-data1.z02
-   - https://static.yximgs.com/kos/nlav10305/KcodeAlertAnalysis-data1/KcodeAlertAnalysis-data1.z03
-   - https://static.yximgs.com/kos/nlav10305/KcodeAlertAnalysis-data1/KcodeAlertAnalysis-data1.z04
-   - https://static.yximgs.com/kos/nlav10305/KcodeAlertAnalysis-data1/KcodeAlertAnalysis-data1.z05
-   - https://static.yximgs.com/kos/nlav10305/KcodeAlertAnalysis-data1/KcodeAlertAnalysis-data1.z06
-   - https://static.yximgs.com/kos/nlav10305/KcodeAlertAnalysis-data1/KcodeAlertAnalysis-data1.zip
- 
- - 测试数据和评测数据2：为方便下载，将数据集切分为多个文件(要全部下载，才能正常解压)：
-   - https://static.yximgs.com/kos/nlav10305/KcodeAlertAnalysis-data2/KcodeAlertAnalysis-data2.z01
-   - https://static.yximgs.com/kos/nlav10305/KcodeAlertAnalysis-data2/KcodeAlertAnalysis-data2.z02
-   - https://static.yximgs.com/kos/nlav10305/KcodeAlertAnalysis-data2/KcodeAlertAnalysis-data2.z03
-   - https://static.yximgs.com/kos/nlav10305/KcodeAlertAnalysis-data2/KcodeAlertAnalysis-data2.z04
-   - https://static.yximgs.com/kos/nlav10305/KcodeAlertAnalysis-data2/KcodeAlertAnalysis-data2.zip
-   
- - 测试数据和评测数据(小集合):
-   - https://static.yximgs.com/kos/nlav10305/KcodeAlertAnalysis-test/KcodeAlertAnalysis-data-test.zip
- 
- - 文件名说明（以"测试数据和评测数据1"说明）：
-   - kcodeAlertForStudent-1.data：监控数据
-   - ruleForStudent-1.txt：报警规则
-   - Q1Result-1.txt：第一问结果集
-   - Q2Input-1：第二问输入
-   - Q2Result-1.txt：第二问结果集
+#### 处理countMap
 
-## 代码提交
-需要将自己完成的代码push到  https://kcode-git.kuaishou.com/kcode/kcodeAlertAnalysis_xxxxxxx  项目下的master分支
+此处采用多线程（就以主调名为分割加入线程池），线下时间提升还可以，线上不明显(...)
 
+线程开始计算该服务对的ip粒度p99和sp（成功率），然后计算是否报警，生成报警字符串,同时q1报警需处理该服务对的q2。
 
-## 评测问题说明
+##### 计算P99
+
+使用一个最小堆，堆的大小为Math.floor(n * 0.01) + 1（n为该粒度日志个数）,堆不满直接加入，满了判断堆顶元素是否小于要加入的元素，是则替换，不是则不做操作。(比起排序nlog(n)的复杂度，此处是nlog(0.01n))
+
+```java
+public void addNode(int k){
+    if(size == length){
+        if(k > heaps[0]){
+            heaps[0] = k;
+            sink(0);
+        }
+        return;
+    }
+    heaps[size++] = k;
+    swim(size-1);
+}
+```
+
+##### 成功率
+
+成功率要转换成字符串，保留两位小数,不需四舍五入。
+
+> 静态工具类的对象在多线程下会出现问题（比如下面的NumberFormat,还有时间的SimpleDateFormat）。
+
+```java
+static NumberFormat nf;
+static {
+    nf = NumberFormat.getPercentInstance();
+    //  保留两位小数
+    nf.setMinimumFractionDigits(2);
+    nf.setMaximumFractionDigits(2);
+    //  不需要四舍五入使用RoundingMode.DOWN
+    nf.setRoundingMode(RoundingMode.DOWN);
+}
+```
+
+##### q1报警信息输出
+
+使用一个滑动窗口（一个ArrayDeque，就存区间内的是否警告标志），如果当前区间都为警告则报警。
+
+```java
+Deque<Integer> deque = new ArrayDeque();
+for (; i < minute; i++) {
+	if(logDomains[i].p99 > monitor.threshold){
+ 		count++;
+ 		deque.addLast(1);
+ 	}
+ 	else 
+ 		deque.addLast(0);
+    if(count == minute){
+   			.... 					//  报警
+ }
+
+```
+
+##### q2计算
+
+主要就是找到该服务对的最长调用链，调用链用可以到达主调节点的最长路径from与从被调可以到达to的最长路径拼接而成。在dfs到一个未遍历过的节点时会把的from或是to记录下来。
+
+```java
+public static List<List<MyPoint>> findLongest(String callName, String calledName) {
+    ...
+    List<List<MyPoint>> fromList = findFrom(from);
+    List<List<MyPoint>> toList = findTo(to);
+	...
+}
+
+private static List<List<MyPoint>> findFrom(MyPoint point) {
+    synchronized (point.from) {					//  只要有一个线程计算该节点的最长from和to就可以了
+        if (point.longFrom != null) {
+            return point.longFrom;
+        } else {
+            int maxLength = 0;
+            List<List<MyPoint>> nowPoint;
+            List<List<MyPoint>> reList = null;
+            int len;
+            for (int i = 0; i < point.from.size(); i++) {
+                nowPoint = findFrom(point.from.get(i));
+                if ((len = nowPoint.get(0).size()) > maxLength) {
+            		...							//  长度超过创建新列表
+                } else if (len == maxLength) {
+                  	... 						//  长度相同加入列表
+                }
+            }
+		...
+        }
+    }
+}
+```
+
+到此为止，Q1所有和Q2的大部分计算都完成了。
+
+---
+
+### Q2
+
+Q2主要都是O(1)级别的计算
+
+```java
+/*
+ * @Author Gwjjj
+ * @Description             快速转换时间
+ * @param time              yyyy-MM-dd HH:mm
+ * @Date 17:11 2020/7/26
+ * @Return
+ **/
+public static int stringCastTime(String time){
+    int h = (time.charAt(11)-'0')*10 + (time.charAt(12)-'0');
+    int min = (time.charAt(14)-'0')*10+(time.charAt(15)-'0');
+    min =   (h - START_HOUR_OF_DAY)*60+ (min-START_MINUTE);
+    return min;
+}
+```
+
+初始化计算的时分为了这边的快速计算，SimpleDateFormat.parse()很慢。（因为比赛只出现同一小时的，严谨点应该把年月日也带上）
+
+```java
+/*
+ * @Author Gwjjj
+ * @Description                     Q2
+ * @param caller                    主调服务名
+ * @param responder                 被调服务名
+ * @param time                      监控时间 yyyy-MM-dd HH:mm
+ * @param type                      监控类型 P99 SP
+ * @Date 15:49 2020/7/25
+ * @Return
+ **/
+@Override
+public Collection<String> getLongestPath(String caller, String responder, String time, String type){
+    if(type.length() == 3){
+        return countMap.get(caller).get(responder).p99String[TimeInit.stringCastTime(time)];
+    }
+    return countMap.get(caller).get(responder).spString[TimeInit.stringCastTime(time)];
+}
+```
 
